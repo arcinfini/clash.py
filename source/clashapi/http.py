@@ -106,7 +106,7 @@ class HTTPClient:
                     
                     # Do things depending on status
                     if 200 <= response.status < 300: return data
-                    else: raise HTTPException(response.status, "", data)
+                    else: raise HTTPException(response, data)
             except asyncio.TimeoutError:
                 pass # Raise failed error or something
 

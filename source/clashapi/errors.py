@@ -5,7 +5,7 @@ class ClashException(Exception):
 
 class HTTPException(ClashException):
     """A base exception for an http response"""
-    def __init__(self, response:ClientResponse=None, data=None):
+    def __init__(self, response:ClientResponse, data):
         self.status = response.status
         
         self.message = data.get('message')
