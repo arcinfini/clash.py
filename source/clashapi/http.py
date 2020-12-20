@@ -7,7 +7,7 @@ from time import process_time
 import aiohttp
 
 from .utils import LRUCache
-from .errors import ClashHTTPException
+from .errors import HTTPException
 
 """
 header : {'authorization': "Bearer <API Token>"}
@@ -106,7 +106,7 @@ class HTTPClient:
                     
                     # Do things depending on status
                     if 200 <= response.status < 300: return data
-                    else: raise ClashHTTPException(response.status, "", data)
+                    else: raise HTTPException(response.status, "", data)
             except asyncio.TimeoutError:
                 pass # Raise failed error or something
 
