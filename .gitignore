@@ -2,4 +2,7 @@ test.py
 /venv
 /examples
 __pycache__/
+
+.vscode/
+
 .DS_Store
