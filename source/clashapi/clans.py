@@ -38,7 +38,7 @@ class Clan(BaseClan):
         self._description = data['description']
         
 
-        self._points = data['clanPoints']
+        self._points = data.get('clanPoints')
         self._versus_points = data['clanVersusPoints']
         self._required_trophies = data['requiredTrophies']
         self._war_frequency = data['warFrequency'] # can be turned into an enum
