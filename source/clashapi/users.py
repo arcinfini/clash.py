@@ -12,12 +12,12 @@ class BaseUser: # A representation that all users must meet
     )
 
     def __init__(self, data):
-        self._tag = data['tag']
-        self._name = data['name']
-        self._exp_level = data['expLevel']
-        self._trophies = data['trophies']
-        self._versus_trophies = data['versusTrophies']
-        self._league = data['league'] # Raw league data, create League class
+        self._tag = data.get('tag')
+        self._name = data.get('name')
+        self._exp_level = data.get('expLevel')
+        self._trophies = data.get('trophies')
+        self._versus_trophies = data.get('versusTrophies')
+        self._league = data.get('league') # Raw league data, create League class
 
 class User(BaseUser): # A representation of a base player profile
     __slots__ = (
@@ -60,8 +60,8 @@ class ProfileUser(User):
     def __init__(self, data):
         super().__init__(data)
 
-        self._achievements = data['achievements']
-        self._troops = data['troops']
+        self._achievements = data.get('achievements')
+        self._troops = data.get('troops')
 
 class ClanMember(BaseUser):
     __slots__ = (
@@ -77,11 +77,11 @@ class ClanMember(BaseUser):
     def __init__(self, data, clan=None):
         super().__init__(data)
 
-        self._role = data['role']
-        self._clan_rank = data['clanRank']
-        self._previous_clan_rank = data['previousClanRank']
-        self._donations = data['donations']
-        self._donations_received = data['donationsReceived']
+        self._role = data.get('role')
+        self._clan_rank = data.get('clanRank')
+        self._previous_clan_rank = data.get('previousClanRank')
+        self._donations = data.get('donations')
+        self._donations_received = data.get('donationsReceived')
         
         self._clan = clan
 
@@ -98,8 +98,8 @@ class WarMember: # Extend baseUser or clanmember or be separate
     )
 
     def __init__(self, data):
-        self._tag = data['tag']
-        self._name = data['name']
-        self._th_level = data['townhallLevel']
-        self._map_position = data['mapPosition']
-        self._attacks = data['attacks'] # Raw WarAttack list
+        self._tag = data.get('tag')
+        self._name = data.get('name')
+        self._th_level = data.get('townhallLevel')
+        self._map_position = data.get('mapPosition')
+        self._attacks = data.get('attacks') # Raw WarAttack list

@@ -8,10 +8,10 @@ class BaseClan:
     )
 
     def __init__(self, data):
-        self._tag = data['tag']
-        self._name = data['name']
-        self._badge_urls = data['badgeUrls']
-        self._level = data['clanLevel']
+        self._tag = data.get('tag')
+        self._name = data.get('name')
+        self._badge_urls = data.get('badgeUrls')
+        self._level = data.get('clanLevel')
 
 class Clan(BaseClan):
     __slots__ = (
@@ -34,22 +34,22 @@ class Clan(BaseClan):
     def __init__(self, data):
         super().__init__(data)
 
-        self._type = data['type'] # has enum type
-        self._description = data['description']
+        self._type = data.get('type') # has enum type
+        self._description = data.get('description')
         
 
         self._points = data.get('clanPoints')
-        self._versus_points = data['clanVersusPoints']
-        self._required_trophies = data['requiredTrophies']
-        self._war_frequency = data['warFrequency'] # can be turned into an enum
-        self._war_win_streak = data['warWinStreak']
-        self._war_wins = data['warWins']
-        self._war_ties = data['warTies']
-        self._war_losses = data['warLosses']
-        self._public_war_log = data['isWarLogPublic']
-        self._war_leage = data['warLeague']
-        self._member_count = data['members']
-        self._members = data['memberList'] # Unparsed list of ClanMember info
+        self._versus_points = data.get('clanVersusPoints')
+        self._required_trophies = data.get('requiredTrophies')
+        self._war_frequency = data.get('warFrequency') # can be turned into an enum
+        self._war_win_streak = data.get('warWinStreak')
+        self._war_wins = data.get('warWins')
+        self._war_ties = data.get('warTies')
+        self._war_losses = data.get('warLosses')
+        self._public_war_log = data.get('isWarLogPublic')
+        self._war_leage = data.get('warLeague')
+        self._member_count = data.get('members')
+        self._members = data.get('memberList') # Unparsed list of ClanMember info
 
     def __repr__(self):
         return f"<{self.__class__.__name__} tag={self._tag}, name={self._name}>"
@@ -75,10 +75,10 @@ class WarClan(BaseClan):
         # War is currently unbuilt and probably shouldn't be used other than a reference
         self._war = war
 
-        self._attacks_used = data['attacks']
-        self._stars_gained = data['stars']
-        self._destruction_caused = data['destructionPercentage']
-        self._participants = data['members'] # This information is unparsed WarMember info
+        self._attacks_used = data.get('attacks')
+        self._stars_gained = data.get('stars')
+        self._destruction_caused = data.get('destructionPercentage')
+        self._participants = data.get('members') # This information is unparsed WarMember info
 
 # Will most likely be relocated later
 
@@ -97,18 +97,18 @@ class War:
 
     def __init__(self, data):
         # In future, potentially - extract_data(self, data) - remember self.__class__
-        self._state = data['state'] # This may later turn into an enum like value instead of a string
+        self._state = data.get('state') # This may later turn into an enum like value instead of a string
 
         # If state means not in war, should the information end here?
 
-        self._team_size = data['teamSize'],
-        self._preparation_start = data['preparationStartTime']
-        self._battle_start = data['startTime']
-        self._end = data['endTime']
+        self._team_size = data.get('teamSize'),
+        self._preparation_start = data.get('preparationStartTime')
+        self._battle_start = data.get('startTime')
+        self._end = data.get('endTime')
 
         # Team order will always be the same, no matter what clan was requested
-        self._team_one = WarClan(data['clan'], self)
-        self._team_two = WarClan(data['opponent'], self)
+        self._team_one = WarClan(data.get('clan'), self)
+        self._team_two = WarClan(data.get('opponent'), self)
 
 # class LeaugeClan(WarClan):
 #     pass
@@ -124,11 +124,11 @@ class WarAttack:
     )
 
     def __init__(self, data):
-        self._attacker = data['attacker'] # Currently only a tag
-        self._defender = data['defender'] # Currently only a tag
-        self._stars = data['stars']
-        self._destruction = data['destructionPercentage']
-        self._order = data['order']
+        self._attacker = data.get('attacker') # Currently only a tag
+        self._defender = data.get('defender') # Currently only a tag
+        self._stars = data.get('stars')
+        self._destruction = data.get('destructionPercentage')
+        self._order = data.get('order')
 
 """
 Python Enum
