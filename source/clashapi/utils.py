@@ -3,6 +3,10 @@
 # and will also house the request method
 from collections import deque
 
+def build_list(data:list, cls, **kwargs):
+    result = [cls(instance, **kwargs) for instance in data]
+    return result
+
 def correct_tag(tag:str):
     tag = tag.strip(' ').upper()
     return f'#{tag}' if not tag.startswith('#') else tag

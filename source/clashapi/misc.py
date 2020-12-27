@@ -1,10 +1,30 @@
-from .users import BaseUser
 import typing
+
+class ClashTag:
+
+    @staticmethod
+    def fix(tag:str):
+        stripped = tag.strip(' ')
+        return f'{"#" if not stripped.startswith("#") else ""}{stripped}'
+
+    def __init__(self, tag, **kwargs):
+        self._tag = ClashTag.fix(tag)
+
+    @property
+    def tag(self):
+        return self._tag
+
+    def __str__(self):
+        return self.tag
+
+    def __eq__(self, other):
+        return self.tag == other.tag
+
 """
 "league": {
-      "name": {},
-      "id": 0,
-      "iconUrls": {}
+    "name": {},
+    "id": 0,
+    "iconUrls": {}
 """
 
 class League:
@@ -14,10 +34,10 @@ class League:
         '_icons'
     )
 
-    def __init__(self, name:str, id:int, icons=None):
+    def __init__(self, name:str, id:int, icon_urls=None, **kwargs):
         self._name = name
         self._id = id
-        self._icons = icons
+        self._icons = icon_urls
     
     @property
     def name(self) -> str:
@@ -29,6 +49,12 @@ class League:
 
     def __eq__(self, other):
         return self.id == other.id
+
+    def __lt__(self, other):
+        return self.id < other.id
+
+    def __gt__(self, other):
+        return self.id > other.id
 
 """
 "warLeague": {
@@ -54,10 +80,10 @@ class Label:
         '_icons'
     )
 
-    def __init__(self, name:str, id:int, icons=None):
+    def __init__(self, name:str, id:int, icon_urls=None, **kwargs):
         self._name = name
         self._id = id
-        self._icons = icons
+        self._icons = icon_urls
     
     @property
     def name(self) -> str:
@@ -69,6 +95,12 @@ class Label:
 
     def __eq__(self, other):
         return self.id == other.id
+
+    def __lt__(self, other):
+        return self.id < other.id
+
+    def __gt__(self, other):
+        return self.id > other.id
 
 """ While this exists, i see no purpose for the knowledge of this data
 "location": {
@@ -140,7 +172,7 @@ legendStatistics": {
   ],
 """
 
-class ArmyUnit:
+class Troop:
     __slots__ = (
         '_level',
         '_name',
@@ -148,7 +180,7 @@ class ArmyUnit:
         '_village',
     )
 
-    def __init__(self, data):
+    def __init__(self, data, **kwargs):
         self._level = data.get('level')
         self._name = data.get('name')
         self._max_level = data.get('maxLevel')
@@ -170,15 +202,6 @@ class ArmyUnit:
     # @property
     # def is_main_village(self):
     #     return None
-
-class Troop(ArmyUnit):
-    pass
-
-class Hero(ArmyUnit):
-    pass
-
-class Spell(ArmyUnit):
-    pass
 
 """
 achievements": [
@@ -204,7 +227,7 @@ class Achievement:
         '_village' # should become an enum
     )
 
-    def __init__(self, data=None):
+    def __init__(self, data=None, **kwargs):
         self._name = data.get('name', 'Unknown')
         self._stars = data.get('stars', 0)
         self._value = data.get('value', 0)
