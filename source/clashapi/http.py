@@ -86,9 +86,8 @@ class HTTPClient:
         # Index cache for data
         if self.__cache is not None:
             try : 
-                print("cache use attempted: {}".format(cache_key))
                 return self.__cache[cache_key]
-            except KeyError: print("cache use failed: {}".format(cache_key))
+            except KeyError: pass
 
         
         async with self.__throttler.lock, self.__throttler:

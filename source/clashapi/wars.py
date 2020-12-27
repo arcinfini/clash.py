@@ -90,4 +90,4 @@ class WarClan(BaseClan):
         self._attacks_used:int = data.get('attacks')
         self._stars_gained:int = data.get('stars')
         self._destruction_caused:float = data.get('destructionPercentage')
-        self._participants:List[WarMember] = build_list(data.get('members'), WarMember) # This information is unparsed WarMember info
+        self._participants:List[WarMember] = build_list(data.get('members'), WarMember)

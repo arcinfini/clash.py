@@ -1,11 +1,26 @@
 
-# Later will house utilities to parse the recieved data into classes
-# and will also house the request method
+from typing import Union, Iterable
 from collections import deque
 
-def build_list(data:list, cls, **kwargs):
-    result = [cls(instance, **kwargs) for instance in data]
-    return result
+# search(members, tag="#mytag")
+def search(iterable, predicate):
+    """Returns members in the iterable that meet the specification of the predicate"""
+    return list(filter(predicate, iterable))
+
+def find(iterable, predicate):
+    """Returns the first element that satisfies the specified predicate"""
+
+    for i in iterable:
+        if predicate(i): return i
+    return None
+
+# build_list([{id=5, name="hello"}], cls, lambda cls, : )
+def build_list(data:Iterable, cls, func=None,**kwargs):
+    """Builds a list based on the list provided"""
+    if func is not None:
+        return [func(cls, instance) for instance in data]
+    else:
+        return [cls(instance, **kwargs) for instance in data]
 
 def correct_tag(tag:str):
     tag = tag.strip(' ').upper()

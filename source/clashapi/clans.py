@@ -17,7 +17,7 @@ class Clan(BaseClan):
         '_war_ties',
         '_war_losses',
         '_public_war_log',
-        '_war_leage',
+        '_war_league',
         '_member_count',
         '_members'
     )
@@ -38,12 +38,57 @@ class Clan(BaseClan):
         self._war_ties = data.get('warTies')
         self._war_losses = data.get('warLosses')
         self._public_war_log = data.get('isWarLogPublic')
-        self._war_leage = data.get('warLeague')
+        self._war_league = data.get('warLeague')
         self._member_count = data.get('members')
-        self._members = build_list(data.get('memberList'), ClanMember, clan=self) # Unparsed list of ClanMember info
+        self._members = build_list(data.get('memberList'), ClanMember, clan=self)
+    
+    @property
+    def points(self) -> int:
+        return self._points
+    
+    @property
+    def versus_points(self) -> int:
+        return self._versus_points
 
-    def __repr__(self):
-        return f"<{self.__class__.__name__} tag={self._tag}, name={self._name}>"
+    @property
+    def required_trophies(self) -> int:
+        return self._required_trophies
+
+    @property
+    def war_frequency(self) -> str:
+        return self._war_frequency
+
+    @property
+    def war_win_streak(self) -> int:
+        return self._war_win_streak
+
+    @property
+    def war_wins(self) -> int:
+        return self._war_wins
+
+    @property
+    def war_ties(self) -> int:
+        return self._war_ties
+
+    @property
+    def war_losses(self) -> int:
+        return self._war_losses
+
+    @property
+    def public_war_log(self) -> bool:
+        return self._public_war_log
+
+    @property
+    def war_league(self):
+        pass
+
+    @property
+    def member_count(self) -> int:
+        return self._member_count
+
+    @property
+    def members(self) -> List[ClanMember]:
+        return self._members
 
 # class LeaugeClan(WarClan):
 #     pass
