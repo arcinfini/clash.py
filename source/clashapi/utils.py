@@ -1,4 +1,6 @@
 
+import datetime
+
 from typing import Union, Iterable
 from collections import deque
 
@@ -25,6 +27,11 @@ def build_list(data:Iterable, cls, func=None,**kwargs):
 def correct_tag(tag:str):
     tag = tag.strip(' ').upper()
     return f'#{tag}' if not tag.startswith('#') else tag
+
+CLASHDATEFORMAT = '%Y%m%dT%H%M%S.000Z'
+def format_time(t:str):
+    dt = datetime.datetime.strptime(t, CLASHDATEFORMAT)
+    return dt
 
 class LRUCache(dict):
     
