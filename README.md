@@ -1,6 +1,6 @@
 # clashapi
 
-My implementation of the Clash of Clans API provided at https://developer.clashofclans.com/#/
+My implementation of the Clash of Clans API provided [here](https://developer.clashofclans.com/#/)
 
 I am using the project build my understanding of git/github and more advanced python topics. 
 Due to my indecisiveness and horrible spelling ability, many outward facing names may change. 
