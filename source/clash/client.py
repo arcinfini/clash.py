@@ -1,7 +1,10 @@
-from .clans import Clan
-from .wars import War
-from .http import HTTPClient
 import typing
+
+from .http import HTTPClient
+
+from .clans import Clan
+from .users import User
+from .war import War
 
 class ClashClient:
     

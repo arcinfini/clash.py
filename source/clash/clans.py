@@ -43,5 +43,8 @@ class Clan(BaseClan):
         self.member_count = data.get('members')
         self.members = build_list(data.get('memberList'), ClanMember, clan=self)
 
+
+
+
 # class LeaugeClan(WarClan):
 #     pass

@@ -1,6 +1,6 @@
 from typing import List
 
-from .abc import BaseUser
+from .abc import BaseUser, Tagable
 from .misc import League, Achievement, Troop
 from .utils import build_list
 
@@ -50,8 +50,8 @@ class ProfileUser(User):
     def __init__(self, data):
         super().__init__(data)
 
-        self._achievements = build_list(data.get('achievements'), Achievement) # Achievment data (should be dict?)
-        self._troops = build_list(data.get('troops'), Troop) # Raw Troop data
+        self.achievements = build_list(data.get('achievements'), Achievement) # Achievment data (should be dict?)
+        self.troops = build_list(data.get('troops'), Troop) # Raw Troop data
 
 class ClanMember(BaseUser):
     __slots__ = (
