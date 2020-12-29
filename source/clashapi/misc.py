@@ -1,5 +1,8 @@
 import typing
 
+from .utils import protected
+
+@protected
 class ClashTag:
 
     @staticmethod
@@ -27,6 +30,7 @@ class ClashTag:
     "iconUrls": {}
 """
 
+@protected
 class League:
     __slots__ = (
         '_name',
@@ -73,6 +77,7 @@ class League:
 
 """
 
+@protected
 class Label:
     __slots__ = (
         '_name',
@@ -172,6 +177,7 @@ legendStatistics": {
   ],
 """
 
+@protected
 class Troop:
     __slots__ = (
         '_level',
@@ -216,6 +222,7 @@ achievements": [
     }
 """
 
+@protected
 class Achievement:
     __slots__ = (
         '_name',

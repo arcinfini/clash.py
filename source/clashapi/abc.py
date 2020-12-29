@@ -1,10 +1,16 @@
+from .utils import protected
 from .misc import League
 
-class Tagable:
+@protected
+class ClashObject(object):
+    def __init_subclass__(cls, *args, **kwargs):
+        return protected(cls)
+
+class Tagable(ClashObject):
     __slots__ = ('_tag', '_name')
     
     def __repr__(self):
-        return f"<{self.__class__.__name__} tag={self._tag}, name={self._name}>"
+        return "<{0.__class__.__name__} tag={0.tag}, name={0.name}>".format(self)
 
     def __init__(self, tag, name):
         self._tag = tag

@@ -2,6 +2,7 @@ from typing import List
 
 from .abc import BaseClan
 from .users import ClanMember
+from .enums import ClanType
 from .utils import build_list
 
 class Clan(BaseClan):
@@ -25,7 +26,7 @@ class Clan(BaseClan):
     def __init__(self, data):
         super().__init__(data)
 
-        self._type = data.get('type') # has enum type
+        self._type = ClanType.from_data(data.get('type')) # has enum type
         self._description = data.get('description')
         
 
@@ -38,7 +39,7 @@ class Clan(BaseClan):
         self._war_ties = data.get('warTies')
         self._war_losses = data.get('warLosses')
         self._public_war_log = data.get('isWarLogPublic')
-        self._war_league = data.get('warLeague')
+        self._war_league = data.get('warLeague') # Build class of data
         self._member_count = data.get('members')
         self._members = build_list(data.get('memberList'), ClanMember, clan=self)
     
