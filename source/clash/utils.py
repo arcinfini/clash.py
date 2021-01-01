@@ -2,12 +2,17 @@
 import datetime
 
 from typing import Union, Iterable
+from operator import attrgetter
 from collections import deque
 
 # search(members, tag="#mytag")
-def search(iterable, predicate):
-    """Returns members in the iterable that meet the specification of the predicate"""
-    return list(filter(predicate, iterable))
+def search(iterable, **attributes):
+    """Returns the first member in the iterable that meets the specification of attributes"""
+
+    for member in iterable:
+        if all(member.__getattribute__(attr) == value for attr, value in attributes.items()):
+            return member
+    return None
 
 
 def find(iterable, predicate):
@@ -17,6 +22,12 @@ def find(iterable, predicate):
         if predicate(i): return i
     return None
 
+def collect(iterable, predicate=None, **attrs):
+    """Returns a list of elements that meet the predicate or attributes passed"""
+
+    default_predicate = lambda x: all(x.__getattribute__(attr) == value for attr, value in attrs.items())
+    predicate = predicate if predicate is not None else default_predicate
+    return list(filter(predicate, self.__member_list))
 
 # build_list([{id=5, name="hello"}], cls, lambda cls, : )
 def build_list(data:Iterable, cls, func=None, **kwargs):

@@ -9,5 +9,6 @@
         "**/__pycache__": true
     },
 
-    "python.envFile": "${workspaceFolder}/.vscode/.env"
+    "python.envFile": "${workspaceFolder}/.vscode/.env",
+    "python.linting.enabled": true
 }

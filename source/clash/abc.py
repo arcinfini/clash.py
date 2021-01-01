@@ -12,6 +12,9 @@ class Tagable(ClashObject):
     def __repr__(self):
         return "<{0.__class__.__name__} tag={0.tag}, name={0.name}>".format(self)
 
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.tag == other.tag
+
     def __init__(self, tag, name):
         self.tag = tag
         self.name = name

@@ -33,15 +33,15 @@ class ClashTag:
 @protected
 class League:
     __slots__ = (
-        '_name',
-        '_id',
-        '_icons'
+        'name',
+        'id',
+        'icons'
     )
 
     def __init__(self, name:str, id:int, icon_urls=None, **kwargs):
-        self._name = name
-        self._id = id
-        self._icons = icon_urls
+        self.name = name
+        self.id = id
+        self.icons = icon_urls
     
     @property
     def name(self) -> str:
@@ -80,19 +80,15 @@ class League:
 @protected
 class Label:
     __slots__ = (
-        '_name',
-        '_id',
-        '_icons'
+        'name',
+        'id',
+        'icons'
     )
 
     def __init__(self, name:str, id:int, icon_urls=None, **kwargs):
-        self._name = name
-        self._id = id
-        self._icons = icon_urls
-    
-    @property
-    def name(self) -> str:
-        return self._name
+        self.name = name
+        self.id = id
+        self.icons = icon_urls
 
     @property
     def id(self) -> int:
@@ -180,29 +176,21 @@ legendStatistics": {
 @protected
 class Troop:
     __slots__ = (
-        '_level',
-        '_name',
-        '_max_level',
-        '_village',
+        'level',
+        'name',
+        'max_level',
+        'village',
     )
 
     def __init__(self, data, **kwargs):
-        self._level = data.get('level')
-        self._name = data.get('name')
-        self._max_level = data.get('maxLevel')
-        self._village = data.get('village')
+        self.level = data.get('level')
+        self.name = data.get('name')
+        self.max_level = data.get('maxLevel')
+        self.village = data.get('village')
 
     @property
-    def level(self):
-        return self._level
-
-    @property
-    def max_level(self):
-        return self._max_level
-
-    @property
-    def name(self):
-        return self._name
+    def is_max(self):
+        return self.max_level == self.level
 
     # Return true based on village value
     # @property
@@ -225,20 +213,20 @@ achievements": [
 @protected
 class Achievement:
     __slots__ = (
-        '_name',
-        '_stars',
-        '_value',
-        '_target',
-        '_info',
-        '_completion_info',
-        '_village' # should become an enum
+        'name',
+        'stars',
+        'value',
+        'target',
+        'info',
+        'completion_info',
+        'village' # should become an enum
     )
 
     def __init__(self, data=None, **kwargs):
-        self._name = data.get('name', 'Unknown')
-        self._stars = data.get('stars', 0)
-        self._value = data.get('value', 0)
-        self._target = data.get('target', 0)
-        self._info = data.get('info', 'Unknown')
-        self._completion_info = data.get('completionInfo', 'Unknown')
-        self._village = data.get('village', 'Unknown')
+        self.name = data.get('name', 'Unknown')
+        self.stars = data.get('stars', 0)
+        self.value = data.get('value', 0)
+        self.target = data.get('target', 0)
+        self.info = data.get('info', 'Unknown')
+        self.completion_info = data.get('completionInfo', 'Unknown')
+        self.village = data.get('village', 'Unknown')
