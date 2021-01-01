@@ -1,7 +1,7 @@
-from typing import List
+from typing import List, Optional
 
-from .abc import BaseUser, Tagable
-from .misc import League, Achievement, Troop
+from .abc import BaseUser, BaseClan, Tagable
+from .misc import League, Achievement, Troop, Hero, Spell
 from .utils import build_list, search, collect
 
 class User(BaseUser): # A representation of a base player profile
@@ -43,29 +43,53 @@ class ProfileUser(User):
     """
     
     __slots__ = (
-        'achievements',
-        'troops'
+        '__achievement_dict',
+
+        '__troop_dict',
+
+        '__hero_dict',
+
+        '__spell_dict',
     )
+
+    def _build(self, cls, data, get):
+        return dict({
+            cls_data.get('name'): cls(cls_data) for cls_data in data.pop(get, [])
+        })
 
     def __init__(self, data):
         super().__init__(data)
 
-        self.__achievement_list = list(
-            Achievement(achievement_data) for achievement_data in data.get('achievements')
-        ) # Achievment data (should be dict?)
-        self.__troop_list = list(
-            Troop(troop_data) fortroop_data in data.get('troops')
-        ) # Maybe later sort by hero, troop and spell
+        self.__achievement_dict = self._build(Achievement, data, 'achievements')
+        self.__troop_dict = self._build(Troop, data, 'troops')
+        self.__hero_dict = self._build(Hero, data, 'heroes')
+        self.__spell_dict = self._build(Spell, data, 'spells')
 
-    # def __init_achievements_list could be used to keep __achievements_list as generator and init it when need to preserve ram
+    # def __init_achievements_list could be used to keep __achievement_list as generator and init it when need to preserve ram
 
     @property
     def achievements(self) -> List[Achievement]:
-        return self.__achievements_list.copy()
+        """List[`Achievement`]: A list of the user's achievements"""
+        
+        return self.__achievement_dict.values()
 
     @property
     def troops(self) -> List[Troop]:
-        return self.__troop_list.copy()
+        """List[`Troop`]: A list of the user's troops"""
+
+        return self.__troop_dict.values()
+
+    @property
+    def heroes(self) -> List[Hero]:
+        """List[`Hero`]: A list of the user's heroes"""
+        
+        return self.__hero_list.values()
+
+    @property
+    def spells(self) -> List[Spell]:
+        """List[`Spell`]: A list of the user's spells"""
+        
+        return self.__spell_list.values()
 
     def search_achievement(self, **attrs) -> Optional[Achievement]:
         r"""Returns the first `Achievement` found based on attributes passed
@@ -86,19 +110,25 @@ class ProfileUser(User):
         The achievements that matches the attributes: `Optional[Achievement]`
         """
 
-        return search(self.__achievement_list, **attrs)
+        return search(self.__achievement_dict.values(), **attrs)
 
     def get_achievement(self, name:str) -> Optional[Achievement]:
         """Gets the `Achievement` with the name that matches the string provided
 
-        This method is a shorthand for..
-            using user.search_achievement(name='achievement name')
+        This method is a shorthand for using..
+            user.search_achievement(name='achievement name')
 
         Parameters
         ==========
+        name : `str`
+            The name of the achievement.
 
+        Returns
+        -------
+        The achievement with the matching name: `Achievemnt`
         """
-        return self.search_achievement(name=name)
+        # Doesnt need to init achievements because it should be done in search_achievement
+        return self.__achievement_dict.get(name, None)
 
     def collect_achievements(self, predicate=None, **attrs):
         """Collects a list of `Achievements` that meet the predicate 
@@ -119,13 +149,26 @@ class ProfileUser(User):
 
         Returns
         -------
-        A list of members that meet the predicate or attributes: List[ClanMember]
+        A list of achievements that meet the predicate or attributes: List[Achievement]
         """
-        return collect(self.__achievement_list, predicate, **attrs)
+
+        return collect(self.__achievement_dict.values(), predicate, **attrs)
 
     # get_troop
     def get_troop(self, name:str) -> Troop:
-        return search(self.__troop_list, name=name)
+        """Gets the `Troop` with the name that matches the string provided.
+        
+        Parameters
+        ==========
+        name : `str`
+            The name of the troop
+
+        Returns
+        -------
+        The troop with the matching name: `Troop`
+        """
+
+        return self.__troop_dict.get(name, None)
 
 class ClanMember(BaseUser):
     __slots__ = (

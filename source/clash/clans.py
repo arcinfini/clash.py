@@ -20,36 +20,36 @@ class Clan(BaseClan):
         'public_war_log',
         'war_league',
         'member_count',
-        '__member_list'
+        '__member_dict'
     )
 
     def __init__(self, data):
         super().__init__(data)
 
-        self.type = ClanType.from_data(data.get('type')) # has enum type
-        self.description = data.get('description')
+        self.type = ClanType.from_data(data.pop('type')) # has enum type
+        self.description = data.pop('description')
         
 
-        self.points = data.get('clanPoints')
-        self.versus_points = data.get('clanVersusPoints')
-        self.required_trophies = data.get('requiredTrophies')
-        self.war_frequency = data.get('warFrequency') # can be turned into an enum
-        self.war_win_streak = data.get('warWinStreak')
-        self.war_wins = data.get('warWins')
-        self.war_ties = data.get('warTies')
-        self.war_losses = data.get('warLosses')
-        self.public_war_log = data.get('isWarLogPublic')
-        self.war_league = data.get('warLeague') # Build class of data
-        self.member_count = data.get('members')
+        self.points = data.pop('clanPoints')
+        self.versus_points = data.pop('clanVersusPoints')
+        self.required_trophies = data.pop('requiredTrophies')
+        self.war_frequency = data.pop('warFrequency') # can be turned into an enum
+        self.war_win_streak = data.pop('warWinStreak')
+        self.war_wins = data.pop('warWins')
+        self.war_ties = data.pop('warTies')
+        self.war_losses = data.pop('warLosses')
+        self.public_war_log = data.pop('isWarLogPublic')
+        self.war_league = data.pop('warLeague') # Build class of data
+        self.member_count = data.pop('members')
         
-        self.__member_list = list(
-            ClanMember(member_data, clan=self) for member_data in data.get('memberList', [])
-        )
+        self.__member_dict = dict({
+            mdata.get('tag'): ClanMember(mdata, clan=self) for mdata in data.pop('memberList', [])
+        })
 
     @property
     def members(self) -> List[ClanMember]:
         """List[`ClanMember`]: A list of the clanmembers"""
-        return self.__member_list.copy()
+        return self.__member_dict.values()
 
     @property
     def is_full(self) -> bool:
@@ -70,7 +70,7 @@ class Clan(BaseClan):
         The member with a matching tag: Optional[`ClanMember`]
         """
         tag = correct_tag(tag)
-        return find(self.__member_list, lambda x: x.tag == tag)
+        return self.__member_dict.get(tag, None)
 
     def search_member(self, **attributes) -> Optional[ClanMember]:
         """Returns the first found `ClanMember` that meets the attributes passed
@@ -85,7 +85,7 @@ class Clan(BaseClan):
         -------
         The member found: Optional[`ClanMember`]
         """
-        return search(self.__member_list, **attributes)
+        return search(self.__member_dict.values(), **attributes)
 
     def collect_members(self, predicate=None, **attrs) -> List[ClanMember]:
         """Returns a list of `ClanMembers` that meet the predicate or attributes passed
@@ -108,7 +108,7 @@ class Clan(BaseClan):
         -------
         A list of members that meet the predicate or attributes: List[ClanMember]
         """
-        return collect(self.__member_list, predicate, **attrs)
+        return collect(self.__member_dict.values(), predicate, **attrs)
 
 # class LeaugeClan(WarClan):
 #     pass

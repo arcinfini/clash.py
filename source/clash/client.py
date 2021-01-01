@@ -33,7 +33,7 @@ class ClashClient:
         return war
         
     async def fetch_user(self, tag:str, cls=User):
-        if not issubclass(cls, BaseClan):
+        if not issubclass(cls, BaseUser):
             raise TypeError('cls is not a subclass of BaseUser')
         
         data = await self.__httpclient.fetch_user(tag)

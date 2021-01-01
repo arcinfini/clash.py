@@ -4,6 +4,7 @@ from .utils import protected
 
 @protected
 class ClashTag:
+    __slots__ = ('tag')
 
     @staticmethod
     def fix(tag:str):
@@ -11,11 +12,7 @@ class ClashTag:
         return f'{"#" if not stripped.startswith("#") else ""}{stripped}'
 
     def __init__(self, tag, **kwargs):
-        self._tag = ClashTag.fix(tag)
-
-    @property
-    def tag(self):
-        return self._tag
+        self.tag = ClashTag.fix(tag)
 
     def __str__(self):
         return self.tag
@@ -42,14 +39,6 @@ class League:
         self.name = name
         self.id = id
         self.icons = icon_urls
-    
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def id(self) -> int:
-        return self._id
 
     def __eq__(self, other):
         return self.id == other.id
@@ -89,10 +78,6 @@ class Label:
         self.name = name
         self.id = id
         self.icons = icon_urls
-
-    @property
-    def id(self) -> int:
-        return self._id
 
     def __eq__(self, other):
         return self.id == other.id
@@ -182,11 +167,14 @@ class Troop:
         'village',
     )
 
-    def __init__(self, data, **kwargs):
-        self.level = data.get('level')
-        self.name = data.get('name')
-        self.max_level = data.get('maxLevel')
-        self.village = data.get('village')
+    def __repr__(self):
+        return "<{0.__class__.__name__} name={0.name}, level={0.level}>".format(self)
+
+    def __init__(self, data=None, **kwargs):
+        self.level = data.get('level', 0)
+        self.name = data.get('name', 'Unknown')
+        self.max_level = data.get('maxLevel', 0)
+        self.village = data.get('village', 'Unknown')
 
     @property
     def is_max(self):
@@ -197,18 +185,11 @@ class Troop:
     # def is_main_village(self):
     #     return None
 
-"""
-achievements": [
-    {
-      "stars": 0,
-      "value": 0,
-      "name": {},
-      "target": 0,
-      "info": {},
-      "completionInfo": {},
-      "village": "string"
-    }
-"""
+class Hero(Troop):
+    pass
+
+class Spell(Troop):
+    pass
 
 @protected
 class Achievement:
@@ -221,6 +202,9 @@ class Achievement:
         'completion_info',
         'village' # should become an enum
     )
+
+    def __repr__(self):
+        return "<{0.__class__.__name__} name={0.name}, stars={0.stars}>".format(self)
 
     def __init__(self, data=None, **kwargs):
         self.name = data.get('name', 'Unknown')
