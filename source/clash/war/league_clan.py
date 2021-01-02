@@ -1,7 +1,7 @@
-from clash.abc import BaseClan
+from clash.abc import BaseClan, MemberContainer
 from .league_member import LeagueMember
 
-class LeagueClan(BaseClan):
+class LeagueClan(BaseClan, MemberContainer):
     __slots__ = ('__member_dict')
 
     def __init__(self, data):
@@ -13,5 +13,4 @@ class LeagueClan(BaseClan):
 
     @property
     def members(self):
-        print(self.__member_dict)
-        return self.__member_dict.values()
+        return list(self.__member_dict.values())

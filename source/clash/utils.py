@@ -27,7 +27,7 @@ def collect(iterable, predicate=None, **attrs):
 
     default_predicate = lambda x: all(x.__getattribute__(attr) == value for attr, value in attrs.items())
     predicate = predicate if predicate is not None else default_predicate
-    return list(filter(predicate, self.__member_list))
+    return list(filter(predicate, iterable))
 
 # build_list([{id=5, name="hello"}], cls, lambda cls, : )
 def build_list(data:Iterable, cls, func=None, **kwargs):

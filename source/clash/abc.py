@@ -1,6 +1,7 @@
 import abc
+import typing
 
-from .utils import protected
+from .utils import protected, collect, search
 from .misc import League
 
 @protected
@@ -55,3 +56,57 @@ class BaseClan(Tagable):
         self.level = data.get('clanLevel')
 
         super().__init__(data.get('tag'), data.get('name'))
+
+# Later could be implemented if multiple types of containers pop up
+# class Container(abc.ABC):
+
+#     @property
+#     @abc.abstractmethod
+#     def _contained_(self): ...
+
+class MemberContainer(abc.ABC):
+    """An ABC mean to host methods for classes that contain a list/dict of members
+    """
+    @property
+    @abc.abstractmethod
+    def members(self) -> typing.List[BaseUser]: 
+        """List[`BaseUser`]: A list of users that are contained within the container"""
+        raise NotImplementedError
+
+    def search_member(self, **attributes) -> typing.Optional[BaseUser]:
+        """Returns the first found `ClanMember` that meets the attributes passed
+        
+        Example
+        -------
+        
+            clan = await client.fetch_clan('clan_tag')
+            member = clan.search_member(name='user name')
+
+        Returns
+        -------
+        The member found: Optional[`BaseUser`]
+        """
+        return search(self.members, **attributes)
+
+    def collect_members(self, predicate=None, **attrs) -> typing.List[BaseUser]:
+        """Returns a list of `ClanMembers` that meet the predicate or attributes passed
+
+        If a predicate is passed then the attributes are ignored
+
+        Examples
+        --------
+            # collects all coleaders
+            clan = await client.fetch_clan('clan_tag')
+            members = clan.collect_members(role='coleader')
+
+        or
+
+            # collects the top ten members
+            clan = await client.fetch_clan('clan_tag')
+            members = clan.collect_members(lambda m: m.clan_rank >= 10)
+
+        Returns
+        -------
+        A list of members that meet the predicate or attributes: List[ClanMember]
+        """
+        return collect(self.members, predicate, **attrs)

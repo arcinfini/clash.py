@@ -14,4 +14,4 @@ class LeagueGroup(ClashObject):
 
     @property
     def clans(self):
-        return self.__clan_dict.values()
+        return list(self.__clan_dict.values())

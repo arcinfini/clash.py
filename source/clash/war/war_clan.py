@@ -1,10 +1,10 @@
 
-from clash.abc import BaseClan
+from clash.abc import BaseClan, MemberContainer
 from clash.utils import build_list
 
 from .war_member import WarMember
 
-class WarClan(BaseClan):
+class WarClan(BaseClan, MemberContainer):
     """
     A representation of a clan in war. 
     """
@@ -15,9 +15,9 @@ class WarClan(BaseClan):
         'attacks_used',
         'stars_gained',
         'destruction_caused',
-        'members',
+        '__member_dict',
 
-        '__is_league_war'
+        'is_league_war'
     )
 
     def __init__(self, data, war, is_league_war=False):
@@ -29,10 +29,18 @@ class WarClan(BaseClan):
         self.attacks_used:int = data.get('attacks', 0)
         self.stars_gained:int = data.get('stars', 0)
         self.destruction_caused:float = data.get('destructionPercentage', 0)
-        self.members:Tuple[WarMember] = tuple(build_list(data.get('members', []), WarMember))
+        
+        self.__member_dict = dict({
+            mdata.get('tag'): WarMember(data) for mdata in data.pop('members', [])
+        })
+        #self.members:Tuple[WarMember] = tuple(build_list(data.get('members', []), WarMember))
 
-        self.__is_league_war = is_league_war
+        self.is_league_war = is_league_war
 
     @property
+    def members(self) -> List[WarMember]:
+        return list(self.__member_dict.values())
+    
+    @property
     def attacks_left(self):
-        return (self.war.team_size * 1 if self.__is_league_war else 1) - self.attacks_used
+        return (self.war.team_size * 1 if self.is_league_war else 1) - self.attacks_used

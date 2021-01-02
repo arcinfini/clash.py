@@ -1,11 +1,11 @@
 from typing import List, Union, Optional
 
-from .abc import BaseClan
+from .abc import BaseClan, MemberContainer
 from .users import ClanMember, User
 from .enums import ClanType
 from .utils import search, find, collect, correct_tag
 
-class Clan(BaseClan):
+class Clan(BaseClan, MemberContainer):
     __slots__ = (
         'type',
         'description',
@@ -71,44 +71,6 @@ class Clan(BaseClan):
         """
         tag = correct_tag(tag)
         return self.__member_dict.get(tag, None)
-
-    def search_member(self, **attributes) -> Optional[ClanMember]:
-        """Returns the first found `ClanMember` that meets the attributes passed
-        
-        Example
-        -------
-        
-            clan = await client.fetch_clan('clan_tag')
-            member = clan.search_member(name='user name')
-
-        Returns
-        -------
-        The member found: Optional[`ClanMember`]
-        """
-        return search(self.__member_dict.values(), **attributes)
-
-    def collect_members(self, predicate=None, **attrs) -> List[ClanMember]:
-        """Returns a list of `ClanMembers` that meet the predicate or attributes passed
-
-        If a predicate is passed then the attributes are ignored
-
-        Examples
-        --------
-            # collects all coleaders
-            clan = await client.fetch_clan('clan_tag')
-            members = clan.collect_members(role='coleader')
-
-        or
-
-            # collects the top ten members
-            clan = await client.fetch_clan('clan_tag')
-            members = clan.collect_members(lambda m: m.clan_rank >= 10)
-
-        Returns
-        -------
-        A list of members that meet the predicate or attributes: List[ClanMember]
-        """
-        return collect(self.__member_dict.values(), predicate, **attrs)
 
 # class LeaugeClan(WarClan):
 #     pass
