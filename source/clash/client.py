@@ -20,7 +20,7 @@ class ClashClient:
             raise TypeError('cls is not a subclass of BaseClan')
 
         data = await self.__httpclient.fetch_clan(tag)
-        clan = cls(data)
+        clan = cls(data, client=self)
         return clan
 
     async def fetch_current_war(self, tag:str, cls=War) -> War:
@@ -29,7 +29,7 @@ class ClashClient:
         
         # Account for private war logs
         data = await self.__httpclient.fetch_current_war(tag)
-        war = War(data)
+        war = War(data, client=self)
         return war
         
     # User Fetches
@@ -39,12 +39,12 @@ class ClashClient:
             raise TypeError('cls is not a subclass of BaseUser')
         
         data = await self.__httpclient.fetch_user(tag)
-        user = cls(data)
+        user = cls(data, client=self)
         return user
 
     # Clan War League Fetches
 
     async def fetch_league_group(self, tag) -> LeagueGroup:
         data = await self.__httpclient.fetch_league_group(tag)
-        league_group = LeagueGroup(data)
+        league_group = LeagueGroup(data, client=self)
         return league_group

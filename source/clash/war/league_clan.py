@@ -4,12 +4,12 @@ from .league_member import LeagueMember
 class LeagueClan(BaseClan, MemberContainer):
     __slots__ = ('__member_dict')
 
-    def __init__(self, data):
+    def __init__(self, data, client):
         self.__member_dict = dict({
             mdata.get('tag'): LeagueMember(mdata, league_group=self) for mdata in data.pop('members', [])
         })
 
-        super().__init__(data)
+        super().__init__(data, client)
 
     @property
     def members(self):

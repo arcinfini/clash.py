@@ -33,14 +33,18 @@ class BaseUser(Tagable): # A representation that all users must meet
         'trophies',
         'versus_trophies',
 
-        'league'
+        'league',
+
+        'client'
     )
 
-    def __init__(self, data):
+    def __init__(self, data, client):
         self.exp_level:int = data.get('expLevel')
         self.trophies:int = data.get('trophies')
         self.versus_trophies:int = data.get('versusTrophies')
         self.league = League(**data.get('league'))
+
+        self.client = client
 
         super().__init__(data.get('tag'), data.get('name'))
 
@@ -48,12 +52,16 @@ class BaseUser(Tagable): # A representation that all users must meet
 class BaseClan(Tagable):
     __slots__ = (
         'badge_urls',
-        'level'
+        'level',
+
+        'client'
     )
 
-    def __init__(self, data):
+    def __init__(self, data, client):
         self.badge_urls = data.get('badgeUrls')
         self.level = data.get('clanLevel')
+        
+        self.client = client
 
         super().__init__(data.get('tag'), data.get('name'))
 

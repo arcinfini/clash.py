@@ -1,3 +1,4 @@
+import typing
 
 from clash.abc import BaseClan, MemberContainer
 from clash.utils import build_list
@@ -20,8 +21,8 @@ class WarClan(BaseClan, MemberContainer):
         'is_league_war'
     )
 
-    def __init__(self, data, war, is_league_war=False):
-        super().__init__(data)
+    def __init__(self, data, client, war, is_league_war=False):
+        super().__init__(data, client)
         
         # War is currently unbuilt and probably shouldn't be used other than a reference
         self.war = war
@@ -31,14 +32,14 @@ class WarClan(BaseClan, MemberContainer):
         self.destruction_caused:float = data.get('destructionPercentage', 0)
         
         self.__member_dict = dict({
-            mdata.get('tag'): WarMember(data) for mdata in data.pop('members', [])
+            mdata.get('tag'): WarMember(data, client=client) for mdata in data.pop('members', [])
         })
         #self.members:Tuple[WarMember] = tuple(build_list(data.get('members', []), WarMember))
 
         self.is_league_war = is_league_war
 
     @property
-    def members(self) -> List[WarMember]:
+    def members(self) -> typing.List[WarMember]:
         return list(self.__member_dict.values())
     
     @property

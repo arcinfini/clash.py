@@ -23,8 +23,8 @@ class Clan(BaseClan, MemberContainer):
         '__member_dict'
     )
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, client):
+        super().__init__(data, client)
 
         self.type = ClanType.from_data(data.pop('type')) # has enum type
         self.description = data.pop('description')
@@ -43,7 +43,7 @@ class Clan(BaseClan, MemberContainer):
         self.member_count = data.pop('members')
         
         self.__member_dict = dict({
-            mdata.get('tag'): ClanMember(mdata, clan=self) for mdata in data.pop('memberList', [])
+            mdata.get('tag'): ClanMember(mdata, client=client, clan=self) for mdata in data.pop('memberList', [])
         })
 
     @property
@@ -71,6 +71,3 @@ class Clan(BaseClan, MemberContainer):
         """
         tag = correct_tag(tag)
         return self.__member_dict.get(tag, None)
-
-# class LeaugeClan(WarClan):
-#     pass

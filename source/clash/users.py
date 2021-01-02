@@ -20,8 +20,8 @@ class User(BaseUser): # A representation of a base player profile
         'clan' # Will not always exists
     )
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, client):
+        super().__init__(data, client)
 
         self.th_level = data.get('townHallLevel')
         self.best_trophies = data.get('bestTrophies')
@@ -57,8 +57,8 @@ class ProfileUser(User):
             cls_data.get('name'): cls(cls_data) for cls_data in data.pop(get, [])
         })
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, client):
+        super().__init__(data, client)
 
         self.__achievement_dict = self._build(Achievement, data, 'achievements')
         self.__troop_dict = self._build(Troop, data, 'troops')
@@ -181,8 +181,8 @@ class ClanMember(BaseUser):
         'clan'
     )
 
-    def __init__(self, data, clan=None):
-        super().__init__(data)
+    def __init__(self, data, client, clan=None):
+        super().__init__(data, client)
 
         self.role = data.get('role')
         self.clan_rank = data.get('clanRank', None)
