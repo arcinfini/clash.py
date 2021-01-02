@@ -5,7 +5,7 @@ from .http import HTTPClient
 from clash.abc import BaseUser, BaseClan
 from .clans import Clan
 from .users import User
-from .war import War
+from .war import War, LeagueGroup
 
 class ClashClient:
     
@@ -32,10 +32,19 @@ class ClashClient:
         war = War(data)
         return war
         
+    # User Fetches
+
     async def fetch_user(self, tag:str, cls=User):
-        if not issubclass(cls, BaseClan):
+        if not issubclass(cls, BaseUser):
             raise TypeError('cls is not a subclass of BaseUser')
         
         data = await self.__httpclient.fetch_user(tag)
         user = cls(data)
         return user
+
+    # Clan War League Fetches
+
+    async def fetch_league_group(self, tag) -> LeagueGroup:
+        data = await self.__httpclient.fetch_league_group(tag)
+        league_group = LeagueGroup(data)
+        return league_group

@@ -132,3 +132,8 @@ class HTTPClient:
 
     async def fetch_user(self, tag, **kwargs):
         return await self.request(RequestInfo('GET', f'/players/{tag}', **kwargs))
+
+    # League Fetches
+
+    async def fetch_league_group(self, tag, **kwargs):
+        return await self.request(RequestInfo('GET', f'/clans/{tag}/currentwar/leaguegroup', **kwargs))
