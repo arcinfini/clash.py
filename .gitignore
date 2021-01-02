@@ -1,6 +1,7 @@
 test.py
 /venv
 /examples
+/structures
 __pycache__/
 
 .vscode/

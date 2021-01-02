@@ -18,7 +18,8 @@ class ClashTag:
         return self.tag
 
     def __eq__(self, other):
-        return self.tag == other.tag
+        # Users and Clans can have the same tag this might not be an ideal way to store a tag
+        return isinstance(other, self.__class__) and self.tag == other.tag
 
 """
 "league": {
