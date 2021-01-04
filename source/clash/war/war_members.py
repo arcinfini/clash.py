@@ -4,6 +4,8 @@ from clash.utils import build_list
 from .war_attack import WarAttack
 
 class WarMember(Tagable):
+    """Represents a member of a clan in a War"""
+
     __slots__ = (
         'th_level',
         'map_position',
@@ -23,5 +25,17 @@ class WarMember(Tagable):
         self.best_opponent_attack = WarAttack(data.get('bestOpponentAttack', {}), client=client) # Could be null
 
         self.client = client
+
+        super().__init__(data.get('tag'), data.get('name'))
+
+
+class LeagueMember(Tagable):
+    """Represents a member of a clan in a LeagueGroup"""
+
+    __slots__ = ('th_level', 'league_group')
+
+    def __init__(self, data, league_group):
+        self.th_level = data.pop('townHallLevel', 0)
+        self.league_group = league_group
 
         super().__init__(data.get('tag'), data.get('name'))

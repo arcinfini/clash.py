@@ -3,11 +3,10 @@ import typing
 from clash.abc import BaseClan, MemberContainer
 from clash.utils import build_list
 
-from .war_member import WarMember
+from .war_members import WarMember, LeagueMember
 
 class WarClan(BaseClan, MemberContainer):
-    """
-    A representation of a clan in war. 
+    """Represents a clan in a War
     """
     
     __slots__ = (
@@ -45,3 +44,20 @@ class WarClan(BaseClan, MemberContainer):
     @property
     def attacks_left(self):
         return (self.war.team_size * 1 if self.is_league_war else 1) - self.attacks_used
+
+
+class LeagueClan(BaseClan, MemberContainer):
+    """Represents a clan in a LeagueGroup"""
+    
+    __slots__ = ('__member_dict')
+
+    def __init__(self, data, client):
+        self.__member_dict = dict({
+            mdata.get('tag'): LeagueMember(mdata, league_group=self) for mdata in data.pop('members', [])
+        })
+
+        super().__init__(data, client)
+
+    @property
+    def members(self):
+        return list(self.__member_dict.values())
