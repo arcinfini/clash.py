@@ -137,3 +137,6 @@ class HTTPClient:
 
     async def fetch_league_group(self, tag, **kwargs):
         return await self.request(RequestInfo('GET', f'/clans/{tag}/currentwar/leaguegroup', **kwargs))
+
+    async def fetch_round_war(self, war_tag, **kwargs):
+        return await self.request(RequestInfo('GET', f'/clanwarleagues/wars/{war_tag}', **kwargs))

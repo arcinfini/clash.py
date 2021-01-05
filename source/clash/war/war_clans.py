@@ -17,10 +17,10 @@ class WarClan(BaseClan, MemberContainer):
         'destruction_caused',
         '__member_dict',
 
-        'is_league_war'
+        'is_cwl'
     )
 
-    def __init__(self, data, client, war, is_league_war=False):
+    def __init__(self, data, client, war, is_cwl=False):
         super().__init__(data, client)
         
         # War is currently unbuilt and probably shouldn't be used other than a reference
@@ -31,11 +31,11 @@ class WarClan(BaseClan, MemberContainer):
         self.destruction_caused:float = data.get('destructionPercentage', 0)
         
         self.__member_dict = dict({
-            mdata.get('tag'): WarMember(data, client=client) for mdata in data.pop('members', [])
+            mdata.get('tag'): WarMember(mdata, client=client) for mdata in data.pop('members', [])
         })
         #self.members:Tuple[WarMember] = tuple(build_list(data.get('members', []), WarMember))
 
-        self.is_league_war = is_league_war
+        self.is_cwl = is_cwl
 
     @property
     def members(self) -> typing.List[WarMember]:
@@ -43,7 +43,7 @@ class WarClan(BaseClan, MemberContainer):
     
     @property
     def attacks_left(self):
-        return (self.war.team_size * 1 if self.is_league_war else 1) - self.attacks_used
+        return (self.war.team_size * (1 if self.is_cwl else 2)) - self.attacks_used
 
 
 class LeagueClan(BaseClan, MemberContainer):

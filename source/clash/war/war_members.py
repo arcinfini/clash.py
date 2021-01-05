@@ -21,7 +21,7 @@ class WarMember(Tagable):
     def __init__(self, data, client):
         self.th_level:int = data.get('townhallLevel')
         self.map_position:int = data.get('mapPosition')
-        self.attacks = tuple(build_list(data.get('attacks', []), WarAttack))
+        self.attacks = tuple(build_list(data.get('attacks', []), WarAttack, client=client))
         self.best_opponent_attack = WarAttack(data.get('bestOpponentAttack', {}), client=client) # Could be null
 
         self.client = client

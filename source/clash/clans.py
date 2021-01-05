@@ -58,16 +58,21 @@ class Clan(BaseClan, MemberContainer):
 
     def get_member(self, tag:str) -> Optional[ClanMember]:
         """Gets the `ClanMember` with the tag that matches the tag provided
-        
+
         Example
         -------
         
             clan = await client.fetch_clan('clan_tag')
             member = clan.get_member('player_tag')
 
+        Parameters
+        ----------
+        tag : `str`
+            The tag of the member to retrieve
+
         Returns
         -------
-        The member with a matching tag: Optional[`ClanMember`]
+        The member with a matching tag: Optional[:class:`ClanMember`]
         """
         tag = correct_tag(tag)
         return self.__member_dict.get(tag, None)

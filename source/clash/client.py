@@ -29,7 +29,7 @@ class ClashClient:
         
         # Account for private war logs
         data = await self.__httpclient.fetch_current_war(tag)
-        war = War(data, client=self)
+        war = War(data, client=self, focused=tag)
         return war
         
     # User Fetches
@@ -48,3 +48,8 @@ class ClashClient:
         data = await self.__httpclient.fetch_league_group(tag)
         league_group = LeagueGroup(data, client=self)
         return league_group
+
+    async def fetch_round_war(self, war_tag):
+        data = await self.__httpclient.fetch_round_war(war_tag)
+        war = War(data, client=self, is_cwl=True)
+        return war

@@ -2,12 +2,16 @@ from enum import Enum
 
 class WarState(Enum):
     NOTINWAR = 0
-    INWAR = 1
+    PREPARATION = 1
+    INWAR = 2
+    WARENDED = 3
 
     @classmethod
     def from_data(cls, value:str):
         if value == "notInWar": return cls.NOTINWAR
+        elif value == "preparation": return cls.PREPARATION
         elif value == "inWar": return cls.INWAR
+        elif value == "warEnded": return cls.WARENDED
         # Should only reach this if the API is changed
         else: raise Exception("Enum WarState is outdated")
 

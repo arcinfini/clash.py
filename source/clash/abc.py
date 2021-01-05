@@ -82,7 +82,7 @@ class MemberContainer(abc.ABC):
         raise NotImplementedError
 
     def search_member(self, **attributes) -> typing.Optional[BaseUser]:
-        """Returns the first found `ClanMember` that meets the attributes passed
+        """Returns the first found user that meets the attributes passed
         
         Example
         -------
@@ -97,7 +97,7 @@ class MemberContainer(abc.ABC):
         return search(self.members, **attributes)
 
     def collect_members(self, predicate=None, **attrs) -> typing.List[BaseUser]:
-        """Returns a list of `ClanMembers` that meet the predicate or attributes passed
+        """Returns a list of users that meet the predicate or attributes passed
 
         If a predicate is passed then the attributes are ignored
 
@@ -118,3 +118,23 @@ class MemberContainer(abc.ABC):
         A list of members that meet the predicate or attributes: List[ClanMember]
         """
         return collect(self.members, predicate, **attrs)
+
+class ClanContainer(abc.ABC):
+    
+    @property
+    @abc.abstractmethod
+    def clans(self) -> typing.List[BaseClan]:
+        """List[`BaseClan`]: A list of clans that are contained within the container"""
+        raise NotImplementedError
+
+    def search_clan(self, **attributes) -> typing.Optional[BaseClan]:
+        """
+        """
+
+        return search(self.clans, **attributes)
+
+    def collect_clans(self, predicate=None, **attributes) -> typing.List[BaseClan]:
+        """
+        """
+
+        return collect(self.clans, predicate, **attributes)
