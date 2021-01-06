@@ -10,6 +10,8 @@ class ClashObject(object):
         return protected(cls)
 
 class Tagable(ClashObject):
+    """Represents objects that have a tag and name associated with them"""
+
     __slots__ = ('tag', 'name')
     
     def __repr__(self):
@@ -23,8 +25,7 @@ class Tagable(ClashObject):
         self.name = name
 
 class BaseUser(Tagable): # A representation that all users must meet
-    """
-    A BaseUser inherited by other user classes.
+    """A BaseUser inherited by other user classes.
 
     """
     

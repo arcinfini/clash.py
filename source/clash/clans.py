@@ -1,8 +1,9 @@
 from typing import List, Union, Optional
 
-from .abc import BaseClan, MemberContainer
+from clash.abc import BaseClan, MemberContainer
 from .users import ClanMember, User
 from .enums import ClanType
+from .misc import WarLeague
 from .utils import search, find, collect, correct_tag
 
 class Clan(BaseClan, MemberContainer):
@@ -26,21 +27,21 @@ class Clan(BaseClan, MemberContainer):
     def __init__(self, data, client):
         super().__init__(data, client)
 
-        self.type = ClanType.from_data(data.pop('type')) # has enum type
+        self.type = ClanType.from_value(data.pop('type')) # has enum type
         self.description = data.pop('description')
         
 
-        self.points = data.pop('clanPoints')
-        self.versus_points = data.pop('clanVersusPoints')
-        self.required_trophies = data.pop('requiredTrophies')
-        self.war_frequency = data.pop('warFrequency') # can be turned into an enum
-        self.war_win_streak = data.pop('warWinStreak')
-        self.war_wins = data.pop('warWins')
-        self.war_ties = data.pop('warTies')
-        self.war_losses = data.pop('warLosses')
-        self.public_war_log = data.pop('isWarLogPublic')
-        self.war_league = data.pop('warLeague') # Build class of data
-        self.member_count = data.pop('members')
+        self.points:int = data.pop('clanPoints')
+        self.versus_points:int = data.pop('clanVersusPoints')
+        self.required_trophies:int = data.pop('requiredTrophies')
+        self.war_frequency:str = data.pop('warFrequency') # can be turned into an enum
+        self.war_win_streak:int = data.pop('warWinStreak')
+        self.war_wins:int = data.pop('warWins')
+        self.war_ties:int = data.pop('warTies')
+        self.war_losses:int = data.pop('warLosses')
+        self.public_war_log:bool = data.pop('isWarLogPublic')
+        self.war_league = WarLeague(data.pop('warLeague')) # Build class of data
+        self.member_count:int = data.pop('members')
         
         self.__member_dict = dict({
             mdata.get('tag'): ClanMember(mdata, client=client, clan=self) for mdata in data.pop('memberList', [])

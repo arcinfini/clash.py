@@ -1,6 +1,28 @@
 from enum import Enum
 
-class WarState(Enum):
+class BaseEnum(Enum):
+    @classmethod
+    def from_value(cls, value:str):
+        """Searches the referenced Enum for the result of value.upper()
+        
+        Parameters
+        ----------
+        value : `str`
+            The value to search the enum for
+
+        Returns
+        -------
+        The enum value corresponding to value.upper()
+        """
+        try: return cls.__members__[value.upper()]
+        except KeyError: raise ValueError(
+            "Enum {0.__name__} is outdated or missing value: {1}".format(
+                cls.__name__, 
+                value
+            )
+        )
+
+class WarState(BaseEnum):
     NOTINWAR = 0
     PREPARATION = 1
     INWAR = 2
@@ -8,22 +30,33 @@ class WarState(Enum):
 
     @classmethod
     def from_data(cls, value:str):
-        if value == "notInWar": return cls.NOTINWAR
-        elif value == "preparation": return cls.PREPARATION
-        elif value == "inWar": return cls.INWAR
-        elif value == "warEnded": return cls.WARENDED
-        # Should only reach this if the API is changed
-        else: raise Exception("Enum WarState is outdated")
+        """Deprecated, use from_value instead"""
+        return super().from_value(value)
 
-class ClanType(Enum):
+class ClanType(BaseEnum):
     CLOSED = 0
     OPEN = 1
     INVITEONLY = 2
 
     @classmethod
     def from_data(cls, value:str):
-        if value == "closed": return cls.CLOSED
-        elif value == "open": return cls.OPEN
-        elif value == "inviteOnly": return cls.INVITEONLY
-        # Should only reach this if the API is changed
-        else: raise Exception("Enum ClanType is outdated")
+        """Deprecated, use from_value instead"""
+        return super().from_value(value)
+
+
+class ClanRole(BaseEnum):
+    """An Enum to represent the roles in a clan
+    """
+
+    MEMBER = 0
+    ADMIN = 1
+    ELDER = 1
+    COLEADER = 2
+    LEADER = 3
+
+    def __gt__(self, other):
+        return self.value > other.value
+
+if __name__ == "__main__":
+    print(ClanRole.from_value('coleader') < ClanRole.ELDER)
+    print(ClanRole.ADMIN)

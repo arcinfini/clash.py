@@ -7,7 +7,7 @@ class _AIterator:
 
     async def __anext__(self):
         try: return await self.next()
-        except QueueEmpty: raise StopIteration
+        except QueueEmpty: raise StopAsyncIteration()
 
 class LeagueWarIterator(_AIterator):
     __slots__ = ('__iteration', '__war_tags', '__kwargs', 'client', '__filled')
@@ -24,13 +24,13 @@ class LeagueWarIterator(_AIterator):
         return await self.client.fetch_round_war(tag)
 
     async def _fill(self):
-        # self.__filled = True
+        self.__filled = True
         for tag in self.__war_tags:
             task = create_task(self._calculate(tag))
             await self.__iteration.put(task)
 
     async def next(self):
-        if self.__iteration.empty():
+        if self.__iteration.empty() and self.__filled:
             await self._fill()
 
         return await self.__iteration.get_nowait()

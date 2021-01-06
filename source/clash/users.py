@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from .abc import BaseUser, BaseClan, Tagable
+from .enums import ClanRole
 from .misc import League, Achievement, Troop, Hero, Spell
 from .utils import build_list, search, collect
 
@@ -17,7 +18,7 @@ class User(BaseUser): # A representation of a base player profile
         'best_versus_trophies',
         'versus_wins',
 
-        'clan' # Will not always exists
+        '_clan' # Will not always exists
     )
 
     def __init__(self, data, client):
@@ -36,6 +37,7 @@ class User(BaseUser): # A representation of a base player profile
         if _clan is not None:
             self._clan = BaseClan(_clan)
         else: self._clan = None
+
 
 class ProfileUser(User):
     """
@@ -170,9 +172,10 @@ class ProfileUser(User):
 
         return self.__troop_dict.get(name, None)
 
+
 class ClanMember(BaseUser):
     __slots__ = (
-        'role', # leader, coleader, admin, member
+        'role',
         'clan_rank',
         'previous_clan_rank',
         'donations',
@@ -184,11 +187,11 @@ class ClanMember(BaseUser):
     def __init__(self, data, client, clan=None):
         super().__init__(data, client)
 
-        self.role = data.get('role')
-        self.clan_rank = data.get('clanRank', None)
-        self.previous_clan_rank = data.get('previousClanRank')
-        self.donations = data.get('donations')
-        self.donations_received = data.get('donationsReceived')
+        self.role = ClanRole.from_value(data.get('role'))
+        self.clan_rank:int = data.get('clanRank')
+        self.previous_clan_rank:int = data.get('previousClanRank')
+        self.donations:int = data.get('donations')
+        self.donations_received:int = data.get('donationsReceived')
         
         self.clan = clan
 

@@ -23,3 +23,6 @@ class WarAttack(ClashObject):
         self.order = data.get('order')
 
         self.client = client
+
+    # async def fetch_attacker(self):
+    #     pass

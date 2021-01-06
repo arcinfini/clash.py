@@ -83,6 +83,18 @@ class War(ClashObject, ClanContainer):
         return self._focused
 
     def _set_focused(self, new:str):
+        """Updates the value of the focused property
+        
+        Parameters
+        ----------
+        new : `str`
+            The clan tag of the clan to set as focused
+
+        Raises
+        ------
+        AttributeError: Raises an attribute error if the tag is not present in the war
+        """
+        
         try: 
             focused = self.__clan_dict[new]
             object.__setattr__(self, "_focused", focused) # Doesnt effectivly set the value??
@@ -110,23 +122,6 @@ class War(ClashObject, ClanContainer):
         pass
 
 
-
-    
-
-"""
-
-league = await client.get_league_group('clantag')
-
-league.current_war('clantag') -> Returns the currentwar in the league (the current war or the current preparation if it is the first day)
--: Goes through the war_tags and finds the second to last instance where a wartag is a valid id and async iterates over it to find where the clan exists
-
-league.current_preparation('clantag') -> Returns the current preparation (can be the first day's preparation or none if there is no preparation)
--: Goes through the war_tags and finds the last instance where a wartag is valid and check for validation
-
-Implement an AsyncIterator to iterate over the war_tags
-
-"""
-
 class LeagueRound(ClashObject):
     """Represents a round of wars in Clan War Leagues"""
     
@@ -147,11 +142,27 @@ class LeagueRound(ClashObject):
 
     async def fetch_state(self):
         """Fetches the state of the round
+
+        Returns
+        -------
+        The state of the round
         """
         war = await self.client.fetch_round_war(self.__war_tags[0])
         return war.state
 
     async def find_war(self, clan_tag) -> typing.Optional[War]:
+        """Fetches the current war belonging to the clan tag
+
+        Parameters
+        ----------
+        clan_tag : `str`
+            The tag of the clan to search for
+
+        Returns
+        -------
+        The focused war representation of the clan
+        """
+
         iterator = LeagueWarIterator(self.__war_tags, self.client)
         async for war in iterator:
             # If the attempt to setting the focused clan is successful, it means that is the wanted war
@@ -183,38 +194,66 @@ class LeagueGroup(ClashObject, ClanContainer):
         self.client = client
 
     @property
-    def clans(self):
+    def clans(self) -> typing.List[LeagueClan]:
+        """List[`LeagueClan`]: The clans that are part of the LeagueGroup"""
         return list(self.__clan_dict.values())
 
-    def current_war_round(self) -> LeagueRound:
-        """Gets the current war round
+    async def fetch_war_round(self) -> typing.Optional[LeagueRound]:
+        """Fetches the current war round
 
         Returns
         -------
-        Returns the round that is in the WarState of INWAR: `LeagueRound`
+        The round that is in the WarState of INWAR or the first preparation round: Optional[`LeagueRound`]
         """
-        # Returns the current preparation since there is no war
-        if len(self.__rounds) == 1: return self.__rounds[0]
-        else: return self.__rounds[-2]
+        # Iterates a reversed list (order of most recent round to oldest) for the first InWar
+        for round in reversed(self.__rounds):
+            if await round.fetch_state() == WarState.INWAR:
+                return round
+        return self.__rounds[0]
 
-    def current_war_preparation(self) -> LeagueRound:
-        return self.__rounds[-1]
+    async def fetch_preparation_round(self) -> typing.Optional[LeagueRound]:
+        """Fetches the current war preparation
+
+        Returns
+        -------
+        The round that is in the WarState of PREPARATION: Optional[`LeagueRound`]
+        """
+        for round in reversed(self.__rounds):
+            if await round.fetch_state() == WarState.PREPARATION:
+                return round
+        return None
 
     async def fetch_current_war(self, clan_tag) -> War:
-        current_round = self.current_war_round()
+        """Fetches the current War for the clan tag passed
+
+        Parameters
+        ----------
+        clan_tag : `str`
+            The tag of the clan to search for
+
+        Returns
+        -------
+        The current war for the clan: `War`
+        """
+        current_round = await self.fetch_war_round()
+        if current_round is None: return None
         result = await current_round.find_war(clan_tag)
         return result
 
     async def fetch_current_preparation(self, clan_tag) -> War:
-        preparations = self.current_war_preparation()
-        result = await preparations.find_war(clan_tag)
+        """Fetches the current preparation for the clan tag passed
+
+        Parameters
+        ----------
+        clan_tag : `str`
+            The tag of the clan to search for
+
+        Returns
+        -------
+        The current preparation for the clan: `War`
+        """
+
+        preparation = await self.fetch_preparation_round()
+        if preparation is None: return None
+        result = await preparation.find_war(clan_tag)
         return result
-        
-# Get users who have not attacked yet in your clan
-"""
-group = await client.get_league_group('clantag')
-
-current_war = await group.fetch_current_war('clantag')
-current_war.focused
-
-"""

@@ -33,7 +33,6 @@ class WarClan(BaseClan, MemberContainer):
         self.__member_dict = dict({
             mdata.get('tag'): WarMember(mdata, client=client) for mdata in data.pop('members', [])
         })
-        #self.members:Tuple[WarMember] = tuple(build_list(data.get('members', []), WarMember))
 
         self.is_cwl = is_cwl
 
@@ -44,6 +43,9 @@ class WarClan(BaseClan, MemberContainer):
     @property
     def attacks_left(self):
         return (self.war.team_size * (1 if self.is_cwl else 2)) - self.attacks_used
+
+    # def get_member(self, tag):
+    #     pass
 
 
 class LeagueClan(BaseClan, MemberContainer):

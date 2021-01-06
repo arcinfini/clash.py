@@ -50,12 +50,16 @@ class League:
     def __gt__(self, other):
         return self.id > other.id
 
-"""
-"warLeague": {
-    "name": {},
-    "id": 0
-  }
-"""
+
+class WarLeague:
+	__slots__ = ("name", "id")
+
+	def __eq__(self, other):
+		return isinstance(other, self.__class__) and self.id == other.id
+
+	def __init__(self, data={}):
+		self.name = data.pop("name", 'Unknown')
+		self.id = data.pop("id", 0)
 
 """
 "labels": [
@@ -91,40 +95,40 @@ class Label:
 
 """ While this exists, i see no purpose for the knowledge of this data
 "location": {
-      "localizedName": "string",
-      "id": 0,
-      "name": "string",
-      "isCountry": true,
-      "countryCode": "string"
+		"localizedName": "string",
+		"id": 0,
+		"name": "string",
+		"isCountry": true,
+		"countryCode": "string"
     }
 """
 
 """ Decently important but not critical
 legendStatistics": {
     "bestSeason": {
-      "trophies": 0,
-      "id": "string",
-      "rank": 0
+		"trophies": 0,
+		"id": "string",
+		"rank": 0
     },
     "currentSeason": {
-      "trophies": 0,
-      "id": "string",
-      "rank": 0
+		"trophies": 0,
+		"id": "string",
+		"rank": 0
     },
     "previousSeason": {
-      "trophies": 0,
-      "id": "string",
-      "rank": 0
+		"trophies": 0,
+		"id": "string",
+		"rank": 0
     },
     "previousVersusSeason": {
-      "trophies": 0,
-      "id": "string",
-      "rank": 0
+		"trophies": 0,
+		"id": "string",
+		"rank": 0
     },
     "bestVersusSeason": {
-      "trophies": 0,
-      "id": "string",
-      "rank": 0
+		"trophies": 0,
+		"id": "string",
+		"rank": 0
     },
     "legendTrophies": 0
   },
@@ -135,26 +139,26 @@ legendStatistics": {
 """
 "troops": [
     {
-      "level": 0,
-      "name": {},
-      "maxLevel": 0,
-      "village": "string"
+		"level": 0,
+		"name": {},
+		"maxLevel": 0,
+		"village": "string"
     }
   ],
   "heroes": [
     {
-      "level": 0,
-      "name": {},
-      "maxLevel": 0,
-      "village": "string"
+		"level": 0,
+		"name": {},
+		"maxLevel": 0,
+		"village": "string"
     }
   ],
   "spells": [
     {
-      "level": 0,
-      "name": {},
-      "maxLevel": 0,
-      "village": "string"
+		"level": 0,
+		"name": {},
+		"maxLevel": 0,
+		"village": "string"
     }
   ],
 """
