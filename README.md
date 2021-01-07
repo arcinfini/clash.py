@@ -18,7 +18,7 @@ I'm really only working on what I plan on using more often.
 
 
 # Copy install for my forgetful brain
-`pip install git+https://github.com/w-thomas-20/clashapi.git`
+`pip install git+https://github.com/arcinfini/clash.py.git`
 
 ### Its important to note that this repository is not yet set up to be used as a python package
 
