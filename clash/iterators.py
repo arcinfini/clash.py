@@ -30,7 +30,7 @@ class LeagueWarIterator(_AIterator):
             await self.__iteration.put(task)
 
     async def next(self):
-        if self.__iteration.empty() and self.__filled:
+        if self.__iteration.empty() and not self.__filled:
             await self._fill()
 
         return await self.__iteration.get_nowait()

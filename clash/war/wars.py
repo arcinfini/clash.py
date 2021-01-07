@@ -162,7 +162,7 @@ class LeagueRound(ClashObject):
         -------
         The focused war representation of the clan
         """
-
+        
         iterator = LeagueWarIterator(self.__war_tags, self.client)
         async for war in iterator:
             # If the attempt to setting the focused clan is successful, it means that is the wanted war
@@ -238,6 +238,7 @@ class LeagueGroup(ClashObject, ClanContainer):
         current_round = await self.fetch_war_round()
         if current_round is None: return None
         result = await current_round.find_war(clan_tag)
+        print(result)
         return result
 
     async def fetch_current_preparation(self, clan_tag) -> War:
