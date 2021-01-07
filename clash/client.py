@@ -5,7 +5,7 @@ from .http import HTTPClient
 from clash.abc import BaseUser, BaseClan
 from .clans import Clan
 from .users import User
-from .war import War, LeagueGroup
+from .wars import War, LeagueGroup
 
 class ClashClient:
     
