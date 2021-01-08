@@ -35,7 +35,7 @@ class User(BaseUser): # A representation of a base player profile
 
         _clan = data.get("clan", None)
         if _clan is not None:
-            self._clan = BaseClan(_clan)
+            self._clan = BaseClan(_clan, client=client)
         else: self._clan = None
 
 

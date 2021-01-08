@@ -67,11 +67,12 @@ class HTTPClient:
         
         self.__throttler = Throttler(limit=len(tokens)*throttle_limit)
         self.__cache = LRUCache(10000)
-        self.__session = aiohttp.ClientSession()
+        # self.__session = aiohttp.ClientSession()
 
     async def close(self):
-        if self.__session:
-            await self.__session.close()
+        # if self.__session:
+            # await self.__session.close()
+        pass
 
     def _delete_cache_element(self, key):
         try: del self.__cache[key]
@@ -89,10 +90,10 @@ class HTTPClient:
                 return self.__cache[cache_key]
             except KeyError: pass
 
-        
-        async with self.__throttler.lock, self.__throttler:
+        __session = aiohttp.ClientSession()
+        async with self.__throttler.lock, self.__throttler, __session as session:
             try:
-                async with self.__session.request("get", info.url, **info.kwargs) as response:
+                async with session.request("get", info.url, **info.kwargs) as response:
                     data = await response.json()
 
                     try:
